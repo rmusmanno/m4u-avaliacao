@@ -1,5 +1,6 @@
 var Utils = require('../utils/response');
 var Obj = require('../model/bookmark');
+var User = require('../model/user')
 
 // List
 exports.list = function (req, res) {
@@ -10,9 +11,13 @@ exports.list = function (req, res) {
     Obj.find(params, null, { sort: { owner:1 } }, function (err, objs) {
         if (err)
             return Utils.return_error(res);
-        Utils.return_ok(res, objs);
-    });
-    
+
+        User.populate(objs, { path: 'owner', select: 'username' }, function (err, popObjs) {
+            if (err)
+                return Utils.return_error(res);
+            return Utils.return_ok(res, popObjs);
+        });
+    });   
 };
 
 // Create
@@ -23,7 +28,7 @@ exports.create = function (req, res) {
         },
         function (err, obj) {
             if (err)
-              return Utils.return_error(res);
+                return Utils.return_error(res);
             Utils.return_ok(res, obj);
         });
 };
@@ -39,7 +44,12 @@ exports.read = function (req, res) {
           return Utils.return_error(res);
         if (!obj) 
           return Utils.return_notfound(res);
-        Utils.return_ok(res, obj);
+
+        User.populate(obj, { path: 'owner', select: 'username' }, function (err, popObj) {
+            if (err)
+                return Utils.return_error(res);
+            return Utils.return_ok(res, popObj);
+        });
     });
 };
 
