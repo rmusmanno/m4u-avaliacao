@@ -1,0 +1,23 @@
+
+<div>
+{% if 'user' in request.session and request.session.user is not None %}
+	<div class="container">
+		<div class="text-right">
+			Logged as <b>{{ request.session.user.username }}</b>
+			<form method="POST" action="{% url 'logout' %}">
+				{% csrf_token %}
+				<button class="btn btn-primary btn-md" type="submit">Logout</button>
+			</form>
+		</div>
+
+		<div class="text-left">
+			<a href="{% url 'users' %}">Users</a>
+			<a href="{% url 'bookmarks' %}">Bookmarks</a>
+		</div>
+	</div>
+{% endif %}
+	<!-- placeholder nav -->
+	<br>
+	<br>
+	<br>
+</div>

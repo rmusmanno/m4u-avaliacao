@@ -1,0 +1,31 @@
+{% load staticfiles i18n %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        {% block meta_tags %}{% endblock %}
+        <title>
+            {% block title %}{% trans "Django" %}{% endblock %}
+        </title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" type="text/css" />
+            <link rel="stylesheet" href="{% static "bootstrap/dist/css/bootstrap-theme.min.css" %}" type="text/css" />
+        {% endblock %}
+        {% block javascript %}
+            <script src="{% static "jquery/dist/jquery.js" %}" type="text/javascript"></script>
+            <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}" type="text/javascript"></script>
+        {% endblock %}
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        <header class="navbar">
+            {% include "app/navigation.html" %}
+        </header>
+        <div id="main" role="main">
+            <div class="container">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

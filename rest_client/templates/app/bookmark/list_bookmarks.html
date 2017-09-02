@@ -1,0 +1,37 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+	<h1 class="text-center"> Bookmarks </h1>
+
+	  <div class="container">
+	  	<a class="btn btn-primary btn-sm" href="{% url 'create_bookmark' %}">New</a>
+	  </div>
+
+	  <div class="col-lg-12">
+	      <div class="table-responsive">
+	          <table class="table table-bordered table-hover table-striped tablesorter">
+	              <thead>
+	              <tr>
+	                <th class="header"> Owner <i class="icon-sort"></i></th>
+	                <th class="header"> URL <i class="icon-sort"></i></th>
+	                <th class="header"> Updated <i class="icon-sort"></i></th>
+	                <th class="header"></th>
+	                <th class="header"></th>
+	              </tr>
+	          </thead>
+	          <tbody>
+	          
+	          {% for key in data %}
+	              <tr>
+	                  <td>{{ key.owner.username }}</td>
+	                  <td>{{ key.url }}</td>
+	                  <td>{{ key.updated }}</td>
+	                  <td><a href="{% url 'update_bookmark' key.id %}">Edit</a></td>
+	                  <td><a href="{% url 'delete_bookmark' key.id %}">Delete</a></td>
+	              </tr>
+	          {% endfor %}
+	          </tbody>
+	          </table>
+	      </div>
+	    </div>
+{% endblock %}

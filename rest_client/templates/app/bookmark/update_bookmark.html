@@ -1,0 +1,14 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+	<h1 class="container text-center"> Update Bookmark </h1>
+	<div class="container text-center">
+		<form method="POST" action="{% url 'update_bookmark' id %}">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button class="btn btn-primary btn-md" type="submit">Update</button>
+		</form>
+
+		<div><b>{{ err }}</b></div>
+	</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+	<h1 class="container text-center"> Create Bookmark </h1>
+	<div class="container text-center">
+		<form method="POST" action="{% url 'create_bookmark' %}">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button class="btn btn-primary btn-md" type="submit">Create</button>
+		</form>
+
+		<div><b>{{ err }}</b></div>
+	</div>
+{% endblock %}
