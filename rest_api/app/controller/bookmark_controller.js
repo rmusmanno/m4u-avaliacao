@@ -2,13 +2,15 @@ var Utils = require('../utils/response');
 var Obj = require('../model/bookmark');
 var User = require('../model/user')
 
+const bookmarkDefaultReturnFields = { 'url': '1', 'owner': '1', 'updated': '1' };
+
 // List
 exports.list = function (req, res) {
     var params = {};
     if (!req.user.admin)
         params = { owner: req.user._id };
 
-    Obj.find(params, null, { sort: { owner:1 } }, function (err, objs) {
+    Obj.find(params, bookmarkDefaultReturnFields, { sort: { owner:1 } }, function (err, objs) {
         if (err)
             return Utils.return_error(res);
 
@@ -39,7 +41,7 @@ exports.read = function (req, res) {
     if (!req.user.admin)
         params = { owner: req.user._id, _id: req.params.id };
 
-    Obj.find(params, function (err, obj) {
+    Obj.find(params, bookmarkDefaultReturnFields, function (err, obj) {
         if (err)
           return Utils.return_error(res);
         if (!obj) 
@@ -60,7 +62,10 @@ exports.update = function (req, res) {
         params = { owner: req.user._id, _id: req.params.id };
 
     req.body.updated = Date.now();
-    Obj.findByIdAndUpdate(params, req.body, {new: true}, function (err, obj) {
+
+    var opts = { 'new': true, 'fields': bookmarkDefaultReturnFields };
+
+    Obj.findByIdAndUpdate(params, req.body, opts, function (err, obj) {
         if (err)
           return Utils.return_error(res);
         Utils.return_ok(res, obj);
@@ -73,9 +78,10 @@ exports.delete = function (req, res) {
     if (!req.user.admin)
         params = { owner: req.user._id, _id: req.params.id };
 
-    Obj.remove(params, function (err, obj) {
+    Obj.findById(params, bookmarkDefaultReturnFields, function (err, obj) {
         if (err)
-          return Utils.return_error(res);
-        Utils.return_ok(res, { "message": "Object was deleted." });
+            return Utils.return_error(res);
+        obj.remove();
+        Utils.return_ok(res, {"message": "Object " + obj._id + " was deleted." });
     });
 };
