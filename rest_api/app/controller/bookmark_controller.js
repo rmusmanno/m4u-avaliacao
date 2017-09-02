@@ -57,19 +57,27 @@ exports.read = function (req, res) {
 
 // Update
 exports.update = function (req, res) {
-    var params = { _id: req.params.id };
-    if (!req.user.admin)
-        params = { owner: req.user._id, _id: req.params.id };
+    if (req.body.url) {
+        var params = { _id: req.params.id };
+        if (!req.user.admin)
+            params = { owner: req.user._id, _id: req.params.id };
 
-    req.body.updated = Date.now();
+        req.body.updated = Date.now();
 
-    var opts = { 'new': true, 'fields': bookmarkDefaultReturnFields };
+        var opts = { 'new': true, 'fields': bookmarkDefaultReturnFields };
 
-    Obj.findByIdAndUpdate(params, req.body, opts, function (err, obj) {
-        if (err)
-          return Utils.return_error(res);
-        Utils.return_ok(res, obj);
-    });
+        Obj.findOneAndUpdate(params, req.body, opts, function (err, obj) {
+            if (err)
+                return Utils.return_error(res);
+            if (!obj)
+                return Utils.return_error(res);
+            Utils.return_ok(res, obj);
+        });
+    } else {
+        Utils.return_error(res);
+    }
+
+
 };
 
 // Delete
@@ -78,8 +86,10 @@ exports.delete = function (req, res) {
     if (!req.user.admin)
         params = { owner: req.user._id, _id: req.params.id };
 
-    Obj.findById(params, bookmarkDefaultReturnFields, function (err, obj) {
+    Obj.findOne(params, bookmarkDefaultReturnFields, function (err, obj) {
         if (err)
+            return Utils.return_error(res);
+        if (!obj)
             return Utils.return_error(res);
         obj.remove();
         Utils.return_ok(res, {"message": "Object " + obj._id + " was deleted." });
