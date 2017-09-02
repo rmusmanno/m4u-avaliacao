@@ -62,7 +62,6 @@ describe('Bookmarks', () => {
               .get('/api/bookmarks/' + bookmark._id)
               .set('content-type', 'application/x-www-form-urlencoded')
               .set('Authorization', authorization(testUsername, testUsername))
-              .send(bookmark)
               .end((err, res) => {
                   res.should.have.status(200);
                   res.body.should.be.a('array');

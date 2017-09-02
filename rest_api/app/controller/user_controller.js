@@ -61,12 +61,14 @@ exports.update = function (req, res) {
 
         var opts = { 'new': true, 'fields': userDefaultReturnFields };
 
-        Obj.findByIdAndUpdate(req.params.id, req.body, opts, function (err, obj) {
+        Obj.findOneAndUpdate(req.params.id, req.body, opts, function (err, obj) {
             if (err)
                 return Utils.return_error(res);
-            Utils.return_ok(res, obj);
+            return Utils.return_ok(res, obj);
         });
     }
+
+    return Utils.return_error(res);
 };
 
 // Delete
@@ -76,9 +78,11 @@ exports.delete = function (req, res) {
             if (err)
                 return Utils.return_error(res);
             obj.remove();
-            Utils.return_ok(res, {"message": "Object " + obj._id + " was deleted." });
+            return Utils.return_ok(res, {"message": "Object " + obj._id + " was deleted." });
         });
     }
+
+    return Utils.return_error(res);
 };
 
 // Me
@@ -88,6 +92,6 @@ exports.me = function (req, res) {
             return Utils.return_error(res);
         if (!obj) 
             return Utils.return_notfound(res);
-        Utils.return_ok(res, obj);
+        return Utils.return_ok(res, obj);
     });
 };
