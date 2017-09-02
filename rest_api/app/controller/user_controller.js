@@ -1,10 +1,12 @@
 var Utils = require('../utils/response');
 var Obj = require('../model/user');
 
+const userDefaultReturnFields = { 'username': '1', 'admin': '1', 'updated': '1' };
+
 // List
 exports.list = function (req, res) {
     if (req.user.admin) {
-        Obj.find({}, function (err, objs) {
+        Obj.find({}, userDefaultReturnFields, function (err, objs) {
         if (err)
             return Utils.return_error(res);
         Utils.return_ok(res, objs);
@@ -24,14 +26,14 @@ exports.create = function (req, res) {
         function (err, obj) {
             if (err)
             	return Utils.return_error(res);
-            Utils.return_ok(res, obj);
+            Utils.return_ok(res, { '_id': obj._id });
         });
 };
 
 // Read
 exports.read = function (req, res) {
     if (req.user.admin || req.user._id == req.params.id) {
-        Obj.findById(req.params.id, function (err, obj) {
+        Obj.findById(req.params.id, userDefaultReturnFields, function (err, obj) {
             if (err)
                 return Utils.return_error(res);
             if (!obj) 
@@ -50,7 +52,10 @@ exports.update = function (req, res) {
             req.body.admin = false;
 
         req.body.updated = Date.now();
-        Obj.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, obj) {
+
+        var opts = { 'new': true, 'fields': userDefaultReturnFields };
+
+        Obj.findByIdAndUpdate(req.params.id, req.body, opts, function (err, obj) {
             if (err)
                 return Utils.return_error(res);
             Utils.return_ok(res, obj);
@@ -61,7 +66,7 @@ exports.update = function (req, res) {
 // Delete
 exports.delete = function (req, res) {
     if (req.user.admin || req.user._id == req.params.id) {
-        Obj.findById(req.params.id, function (err, obj) {
+        Obj.findById(req.params.id, userDefaultReturnFields, function (err, obj) {
             if (err)
                 return Utils.return_error(res);
             obj.remove();
@@ -72,7 +77,7 @@ exports.delete = function (req, res) {
 
 // Me
 exports.me = function (req, res) {
-    Obj.findById(req.user._id, function (err, obj) {
+    Obj.findById(req.user._id, userDefaultReturnFields, function (err, obj) {
         if (err)
             return Utils.return_error(res);
         if (!obj) 
