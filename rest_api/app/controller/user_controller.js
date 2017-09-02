@@ -69,3 +69,14 @@ exports.delete = function (req, res) {
         });
     }
 };
+
+// Me
+exports.me = function (req, res) {
+    Obj.findById(req.user._id, function (err, obj) {
+        if (err)
+            return Utils.return_error(res);
+        if (!obj) 
+            return Utils.return_notfound(res);
+        Utils.return_ok(res, obj);
+    });
+};

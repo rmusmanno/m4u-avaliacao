@@ -22,6 +22,9 @@ module.exports = function(app, router) {
 		.put(authController.isAuthenticated, userController.update)
 		.delete(authController.isAuthenticated, userController.delete);
 
+	router.route('/me')
+		.get(authController.isAuthenticated, userController.me);
+
 	var bmController = require('./controller/bookmark_controller');
 	router.route('/bookmarks')
 		.get(authController.isAuthenticated, bmController.list)
