@@ -12,7 +12,13 @@ exports.list = function (req, res) {
         Utils.return_ok(res, objs);
         });
     } else {
-        Utils.return_error(res);
+        Obj.findById(req.user._id, userDefaultReturnFields, function (err, obj) {
+            if (err)
+                return Utils.return_error(res);
+            if (!obj) 
+                return Utils.return_notfound(res);
+            Utils.return_ok(res, obj);
+        });
     }
 };
 
