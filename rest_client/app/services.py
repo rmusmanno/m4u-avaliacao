@@ -9,7 +9,8 @@ import datetime
 import logging
 logger = logging.getLogger('django')
 
-REST_BASE_URL = 'http://localhost:3000/'
+#REST_BASE_URL = 'http://localhost:3000/'
+REST_BASE_URL = 'http://restserver:3000/'
 REST_DATE_FIELD_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 def fixDate(data, datefield):
@@ -50,6 +51,7 @@ def receive_req(req):
 def login(user):
 	if user:
 		req = requests.get(REST_BASE_URL + 'api/me', headers=header(user))
+
 		jsonData = receive_req(req)
 		if not jsonData:
 			raise PermissionDenied('Unauthorized access!')

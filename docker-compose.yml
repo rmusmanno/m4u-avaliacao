@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  web:
+    restart: always
+    build: ./rest_client
+    expose:
+      - "8000"
+    volumes:
+      - /usr/src/app
+      - /usr/src/app/static
+    env_file: .env
+    environment:
+      DEBUG: 'true'
+    command: /usr/local/bin/gunicorn client.wsgi:application -w 2 -b :8000
+
+  restserver:
+    restart: always
+    build: ./rest_api
+    ports:
+      - "3000:3000"
+    volumes:
+      - /usr/src/api
+      - /usr/src/api/static
+    environment:
+      DEBUG: 'true'
+    command: npm start
+
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web

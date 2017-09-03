@@ -37,7 +37,8 @@ def login(request):
 					services.login(user)
 					request.session['user'] = user
 					return redirect('/app/')
-				except:
+				except Exception as error:
+					logger.info(error)
 					err = 'Invalid access.'
 		else:
 			form = LoginForm()

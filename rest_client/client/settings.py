@@ -25,7 +25,7 @@ SECRET_KEY = 't6y^k(52k8^&!ff3&h#7a$061l5#syvz4!9l1_nck!9)n4=wev'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -119,6 +119,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/www/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGGING = {
     'version': 1,
@@ -134,7 +136,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'level': 'INFO',
-            'filters': ['require_debug_true'],
+            #'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
         },
         'null': {
@@ -147,8 +149,10 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django': {
+        'django':{
+            'level': 'INFO',
             'handlers': ['console'],
+            'propagate': True,
         },
         'django.request': {
             'handlers': ['mail_admins'],
