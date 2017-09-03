@@ -65,8 +65,9 @@ exports.update = function (req, res) {
         req.body.updated = Date.now();
 
         var opts = { 'new': true, 'fields': bookmarkDefaultReturnFields };
+        var upd = req.body;
 
-        Obj.findOneAndUpdate(params, req.body, opts, function (err, obj) {
+        Obj.findOneAndUpdate(params, upd, opts, function (err, obj) {
             if (err)
                 return Utils.return_error(res);
             if (!obj)

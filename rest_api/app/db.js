@@ -13,5 +13,5 @@ User.create({
 },
 	function (err, obj) {
 		if (!err)
-			console.log("Root user created!");
+			console.log("Dummy root user created!");
 });
