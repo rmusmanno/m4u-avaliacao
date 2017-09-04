@@ -1,6 +1,8 @@
 module.exports = function(app, router) {
 	var bodyParser = require('body-parser');
-	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.urlencoded({
+		extended: true
+	}));
 
 	var authController = require('./controller/auth_controller');
 
@@ -9,7 +11,9 @@ module.exports = function(app, router) {
 	});
 
 	router.get('/', function(req, res) {
-		res.json({ message: 'Invalid URL.' });
+		res.json({
+			message: 'Invalid URL.'
+		});
 	});
 
 	var userController = require('./controller/user_controller');
@@ -35,6 +39,5 @@ module.exports = function(app, router) {
 		.put(authController.isAuthenticated, bmController.update)
 		.delete(authController.isAuthenticated, bmController.delete);
 
-	app.use('/api', router);	
+	app.use('/api', router);
 };
-

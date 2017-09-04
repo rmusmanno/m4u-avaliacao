@@ -5,11 +5,24 @@ var bcrypt = require('bcrypt-nodejs');
 var Bookmark = require('./bookmark');
 
 // Define user schema
-var UserSchema = new mongoose.Schema({  
-	username: { type: String, unique: true, required: true },
-	password: { type: String, required: true },
-	admin: { type: Boolean, default: false },
-	updated: { type: Date, default: Date.now }
+var UserSchema = new mongoose.Schema({
+	username: {
+		type: String,
+		unique: true,
+		required: true
+	},
+	password: {
+		type: String,
+		required: true
+	},
+	admin: {
+		type: Boolean,
+		default: false
+	},
+	updated: {
+		type: Date,
+		default: Date.now
+	}
 });
 
 UserSchema.pre('save', function(callback) {
@@ -33,9 +46,11 @@ UserSchema.pre('save', function(callback) {
 UserSchema.pre('remove', function(next) {
 	var user = this;
 
-    Bookmark.remove({ owner: user._id }, function (err, obj) {
-        next();
-    });
+	Bookmark.remove({
+		owner: user._id
+	}, function(err, obj) {
+		next();
+	});
 });
 
 UserSchema.methods.verifyPassword = function(password, cb) {
